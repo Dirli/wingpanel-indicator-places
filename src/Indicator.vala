@@ -33,7 +33,7 @@ namespace Places {
             if (panel_label == null) {
                 panel_label = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 5);
 
-                Gtk.Image places_icon = new Gtk.Image.from_icon_name ("user-desktop-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
+                Gtk.Image places_icon = new Gtk.Image.from_icon_name ("places-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
                 panel_label.pack_start (places_icon);
             }
 
