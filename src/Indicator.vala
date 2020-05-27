@@ -26,6 +26,8 @@ namespace Places {
                     display_name : "Places Indicator",
                     description: _("Manage disks, volumes, places from the panel."));
 
+            Gtk.IconTheme.get_default().add_resource_path("/io/elementary/desktop/wingpanel/places");
+
             visible = true;
         }
 
