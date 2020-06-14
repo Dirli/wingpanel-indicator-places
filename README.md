@@ -2,6 +2,12 @@
 
 Manage disks, volumes, places from the panel
 
+<p align="left">
+    <a href="https://paypal.me/Dirli85">
+        <img src="https://img.shields.io/badge/Donate-PayPal-green.svg">
+    </a>
+</p>
+
 ![Screenshot](data/screenshot1.png)  
 
 ## For Debian
