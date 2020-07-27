@@ -19,7 +19,7 @@
 namespace Places.Widgets {
     public class MountItem : ListItem {
         private GLib.Mount mount;
-        public signal void unmount_end ();
+
         public MountItem (GLib.Mount mount, string? mount_class) {
             string elem_image, _category_name;
             switch (mount_class) {
@@ -38,8 +38,10 @@ namespace Places.Widgets {
             }
 
             base (mount.get_name (), elem_image, mount.get_symbolic_icon ());
+
             category_name = _category_name;
             this.mount = mount;
+
             Gtk.Button unmount_button = new Gtk.Button.from_icon_name ("media-eject-symbolic", Gtk.IconSize.MENU);
             unmount_button.set_relief (Gtk.ReliefStyle.NONE);
             unmount_button.set_can_focus (false);
@@ -71,7 +73,6 @@ namespace Places.Widgets {
         private void on_eject (GLib.Object? obj, GLib.AsyncResult res) {
             try {
                 mount.eject_with_operation.end (res);
-                unmount_end ();
             } catch (GLib.Error e) {
                 warning (_("Error while ejecting device"));
                 warning (e.message);
@@ -87,7 +88,6 @@ namespace Places.Widgets {
         private void on_unmount (GLib.Object? obj, GLib.AsyncResult res) {
             try {
                 mount.unmount_with_operation.end (res);
-                unmount_end ();
             } catch (GLib.Error e) {
                 warning (_("Error while unmounting volume"));
                 warning (e.message);

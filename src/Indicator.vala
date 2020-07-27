@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Dirli <litandrej85@gmail.com>
+ * Copyright (c) 2018-2020 Dirli <litandrej85@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,15 +18,17 @@
 
 namespace Places {
     public class Indicator : Wingpanel.Indicator {
+        private GLib.VolumeMonitor volume_monitor;
+
         private Widgets.Popover? main_widget = null;
         private Gtk.Box? panel_label = null;
 
         public Indicator () {
-            Object (code_name : "places-indicator",
-                    display_name : "Places Indicator",
-                    description: _("Manage disks, volumes, places from the panel."));
+            Object (code_name : "places-indicator");
 
-            Gtk.IconTheme.get_default().add_resource_path("/io/elementary/desktop/wingpanel/places");
+            Gtk.IconTheme.get_default ().add_resource_path ("/io/elementary/desktop/wingpanel/places");
+
+            volume_monitor = GLib.VolumeMonitor.get ();
 
             visible = true;
         }
@@ -53,11 +55,77 @@ namespace Places {
             return main_widget;
         }
 
-        public override void opened () {
-            main_widget.refresh_mounts ();
+        private void refresh_mounts () {
+            if (main_widget == null) {
+                return;
+            }
+
+            main_widget.clear_volumes ();
+
+            foreach (GLib.Drive drive in volume_monitor.get_connected_drives ()) {
+                foreach (GLib.Volume volume in drive.get_volumes ()) {
+                    GLib.Mount mount = volume.get_mount ();
+
+                    if (mount == null) {
+                        main_widget.add_volume (volume);
+                    } else {
+                        main_widget.add_mount (mount, volume.get_identifier ("class"));
+                    }
+                }
+            }
+            // Add volumes not connected with a drive
+            foreach (GLib.Volume volume in volume_monitor.get_volumes ()) {
+                if (volume.get_drive () != null) {
+                    continue;
+                }
+
+                GLib.Mount mount = volume.get_mount ();
+                if (mount == null) {
+                    main_widget.add_volume (volume);
+                } else {
+                    main_widget.add_mount (mount, volume.get_identifier ("class"));
+                }
+            }
+            // Add mounts without volumes
+            foreach (GLib.Mount mount in volume_monitor.get_mounts ()) {
+                if (mount.is_shadowed () || mount.get_volume () != null) {
+                    continue;
+                }
+
+                GLib.File root = mount.get_default_location ();
+                if (!root.is_native ()) {
+                    main_widget.add_mount (mount, "network");
+                } else {
+                    main_widget.add_mount (mount, "device");
+                }
+            }
+
+            main_widget.get_child_at (0, 1).show_all ();
         }
 
-        public override void closed () {}
+        private void on_mount_changed (GLib.Mount mount) {
+            refresh_mounts ();
+        }
+
+        private void on_volume_changed (GLib.Volume volume) {
+            refresh_mounts ();
+        }
+
+        public override void opened () {
+            refresh_mounts ();
+
+            volume_monitor.volume_added.connect (on_volume_changed);
+            volume_monitor.volume_removed.connect (on_volume_changed);
+            volume_monitor.mount_added.connect (on_mount_changed);
+            volume_monitor.mount_removed.connect (on_mount_changed);
+        }
+
+        public override void closed () {
+            volume_monitor.volume_added.disconnect (on_volume_changed);
+            volume_monitor.volume_removed.disconnect (on_volume_changed);
+            volume_monitor.mount_added.disconnect (on_mount_changed);
+            volume_monitor.mount_removed.disconnect (on_mount_changed);
+        }
     }
 }
 

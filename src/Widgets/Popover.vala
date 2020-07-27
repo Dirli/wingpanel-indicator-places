@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Dirli <litandrej85@gmail.com>
+ * Copyright (c) 2018-2020 Dirli <litandrej85@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
 
 namespace Places.Widgets {
     public class Popover : Gtk.Grid {
-        private GLib.VolumeMonitor volume_monitor;
+
 
         private string user_home;
         private Gtk.ListBox user_listbox;
@@ -31,8 +31,6 @@ namespace Places.Widgets {
             hexpand = true;
             margin_top = 15;
             user_home = GLib.Environment.get_home_dir ();
-
-            volume_monitor = GLib.VolumeMonitor.get();
 
             user_listbox = new Gtk.ListBox();
             user_listbox.set_selection_mode (Gtk.SelectionMode.NONE);
@@ -189,53 +187,13 @@ namespace Places.Widgets {
             }
         }
 
-        public void refresh_mounts() {
-            foreach (Gtk.Widget item in vol_listbox.get_children()) {
+        public void clear_volumes () {
+            foreach (Gtk.Widget item in vol_listbox.get_children ()) {
                 item.destroy ();
             }
-            // Add volumes connected with a drive
-            foreach (GLib.Drive drive in volume_monitor.get_connected_drives ()) {
-                foreach (GLib.Volume volume in drive.get_volumes ()) {
-                    GLib.Mount mount = volume.get_mount ();
-
-                    if (mount == null) {
-                        add_volume (volume);
-                    } else {
-                        add_mount (mount, volume.get_identifier ("class"));
-                    }
-                }
-            }
-            // Add volumes not connected with a drive
-            foreach (GLib.Volume volume in volume_monitor.get_volumes ()) {
-                if (volume.get_drive () != null) {
-                    continue;
-                }
-
-                GLib.Mount mount = volume.get_mount ();
-                if (mount == null) {
-                    add_volume (volume);
-                } else {
-                    add_mount (mount, volume.get_identifier ("class"));
-                }
-            }
-            // Add mounts without volumes
-            foreach (GLib.Mount mount in volume_monitor.get_mounts ()) {
-                if (mount.is_shadowed () || mount.get_volume () != null) {
-                    continue;
-                }
-
-                GLib.File root = mount.get_default_location ();
-                if (!root.is_native ()) {
-                    add_mount (mount, "network");
-                } else {
-                    add_mount (mount, "device");
-                }
-            }
-
-            get_child_at (0, 1).show_all ();
         }
 
-        private void add_volume (GLib.Volume volume) {
+        public void add_volume (GLib.Volume volume) {
             VolumeItem volume_item = new VolumeItem (volume);
             volume_item.mount_done.connect ((file) => {
                 open_directory (file);
@@ -244,13 +202,10 @@ namespace Places.Widgets {
             vol_listbox.add (volume_item);
         }
 
-        private void add_mount (GLib.Mount mount, string? mount_class) {
+        public void add_mount (GLib.Mount mount, string? mount_class) {
             MountItem mount_item = new MountItem (mount, mount_class);
             mount_item.iter_button.clicked.connect (() => {
                 open_directory (mount.get_root ());
-            });
-            mount_item.unmount_end.connect (() => {
-                refresh_mounts ();
             });
 
             vol_listbox.add (mount_item);

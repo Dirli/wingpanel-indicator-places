@@ -18,8 +18,9 @@
 
 namespace Places.Widgets {
     public class VolumeItem : ListItem {
-        private GLib.Volume volume;
         public signal void mount_done (GLib.File open_file);
+
+        private GLib.Volume volume;
 
         public VolumeItem (GLib.Volume volume) {
             string elem_image, _category_name;

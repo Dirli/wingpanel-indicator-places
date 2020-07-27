@@ -4,18 +4,18 @@ project(
     version: '1.0.1'
 )
 
-gnome = import('gnome')
-i18n = import('i18n')
-gettext_name = meson.project_name() + '-indicator'
+gnome = import ('gnome')
+i18n = import ('i18n')
+gettext_name = meson.project_name () + '-indicator'
 
-add_global_arguments('-DGETTEXT_PACKAGE="@0@"'.format(gettext_name), language:'c')
+add_global_arguments ('-DGETTEXT_PACKAGE="@0@"'.format (gettext_name), language:'c')
 
-wingpanel_dep = dependency('wingpanel-2.0')
+wingpanel_dep = dependency ('wingpanel-2.0')
 
-subdir('data')
+subdir ('data')
 
-shared_module(
-    meson.project_name(),
+shared_module (
+    meson.project_name (),
     'src/Indicator.vala',
     'src/Widgets/BookmarksItem.vala',
     'src/Widgets/ListItem.vala',
@@ -24,14 +24,14 @@ shared_module(
     'src/Widgets/VolumeItem.vala',
     gresource,
     dependencies: [
-        dependency('glib-2.0'),
-        dependency('gobject-2.0'),
-        dependency('granite'),
-        dependency('gtk+-3.0'),
+        dependency ('glib-2.0'),
+        dependency ('gobject-2.0'),
+        dependency ('granite'),
+        dependency ('gtk+-3.0'),
         wingpanel_dep
     ],
     install: true,
-    install_dir : wingpanel_dep.get_pkgconfig_variable('indicatorsdir')
+    install_dir : wingpanel_dep.get_pkgconfig_variable ('indicatorsdir')
 )
 
-subdir('po')
+subdir ('po')
