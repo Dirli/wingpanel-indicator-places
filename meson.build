@@ -10,7 +10,7 @@ gettext_name = meson.project_name () + '-indicator'
 
 add_global_arguments ('-DGETTEXT_PACKAGE="@0@"'.format (gettext_name), language:'c')
 
-wingpanel_dep = dependency ('wingpanel-2.0')
+wingpanel_dep = dependency ('wingpanel')
 
 subdir ('data')
 

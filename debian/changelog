@@ -1,3 +1,9 @@
+wingpanel-indicator-places (1.0.1-1) testing; urgency=medium
+
+  * A bit of refactoring
+
+ -- dirli <litandrej85@gmail.com>  Thu, 03 Sep 2020 01:44:19 +0300
+
 wingpanel-indicator-places (1.0.0-1) testing; urgency=medium
 
   * New upstream release
