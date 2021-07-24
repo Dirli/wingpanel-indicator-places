@@ -9,12 +9,13 @@ Build-Depends: debhelper-compat (= 13),
                libwingpanel-dev,
                meson,
                valac (>= 0.40.3)
-Standards-Version: 4.5.0
+Standards-Version: 4.5.1
 Homepage: https://github.com/Dirli/wingpanel-indicator-places
 Rules-Requires-Root: no
 
 Package: wingpanel-indicator-places
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
+Enhances: wingpanel
 Description: Wingpanel places indicator for disks, volumes and places management
  Manage disks, volumes, places from the panel
