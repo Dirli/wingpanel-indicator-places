@@ -11,7 +11,6 @@ Manage disks, volumes, places from the panel
 ![Screenshot](data/screenshot1.png)  
 
 ## For Debian
-
 When mounting volumes, problems with access rights are possible.
 My decision /usr/share/polkit-1/actions/org.freedesktop.UDisks2.policy:
 
@@ -26,15 +25,14 @@ My decision /usr/share/polkit-1/actions/org.freedesktop.UDisks2.policy:
 
 ## Building and Installation
 
-You'll need the following dependencies to build:
+### You'll need the following dependencies to build:
 * valac
 * libgtk-3-dev
 * libgranite-dev
 * libwingpanel-2.0-dev
 * meson
 
-## How To Build
-
+### How to build
     meson build --prefix=/usr
     ninja -C build
     sudo ninja -C build install

@@ -1,3 +1,9 @@
+wingpanel-indicator-places (3.0.0-1) bullseye; urgency=medium
+
+  * Release for EOS6
+
+ -- dirli <litandrej85@gmail.com>  Sun, 25 Jul 2021 01:09:16 +0300
+
 wingpanel-indicator-places (1.0.1-1) testing; urgency=medium
 
   * A bit of refactoring

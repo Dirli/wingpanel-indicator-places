@@ -1,7 +1,7 @@
 project(
-    'xplaces',
-    'vala', 'c',
-    version: '1.0.1'
+  'xplaces',
+  'vala', 'c',
+  version: '3.0.0'
 )
 
 gnome = import ('gnome')
@@ -15,23 +15,23 @@ wingpanel_dep = dependency ('wingpanel')
 subdir ('data')
 
 shared_module (
-    meson.project_name (),
-    'src/Indicator.vala',
-    'src/Widgets/BookmarksItem.vala',
-    'src/Widgets/ListItem.vala',
-    'src/Widgets/MountItem.vala',
-    'src/Widgets/Popover.vala',
-    'src/Widgets/VolumeItem.vala',
-    gresource,
-    dependencies: [
-        dependency ('glib-2.0'),
-        dependency ('gobject-2.0'),
-        dependency ('granite'),
-        dependency ('gtk+-3.0'),
-        wingpanel_dep
-    ],
-    install: true,
-    install_dir : wingpanel_dep.get_pkgconfig_variable ('indicatorsdir')
+  meson.project_name (),
+  'src/Indicator.vala',
+  'src/Widgets/BookmarksItem.vala',
+  'src/Widgets/ListItem.vala',
+  'src/Widgets/MountItem.vala',
+  'src/Widgets/Popover.vala',
+  'src/Widgets/VolumeItem.vala',
+  gresource,
+  dependencies: [
+    dependency ('glib-2.0'),
+    dependency ('gobject-2.0'),
+    dependency ('granite'),
+    dependency ('gtk+-3.0'),
+    wingpanel_dep
+  ],
+  install: true,
+  install_dir : wingpanel_dep.get_pkgconfig_variable ('indicatorsdir')
 )
 
 subdir ('po')
